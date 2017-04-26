@@ -63,6 +63,14 @@
 
 /*==================[inclusions]=============================================*/
 #include "stdint.h"
+#include "adc.h"
+#include "timer.h"
+#include "uart.h"
+#include "itoa.h"
+#include "led.h"
+#include "switch.h"
+#include "mic.h"
+#include "dht.h"
 
 /*==================[macros]=================================================*/
 #define lpc4337            1
@@ -95,6 +103,17 @@ extern void ResetISR(void);
  **         externals/base/cortexM4/lpc43xx/linker/ciaa_lpc4337.ld.
  **/
 extern void _vStackTop(void);
+
+
+
+void RIT_IRQHandler(void);
+
+void Delay(uint64_t sec);
+void Countdown(uint64_t paso);
+void Countup(uint64_t paso);
+
+
+
 #else
 #endif
 

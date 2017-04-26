@@ -72,6 +72,9 @@
 #include "ciaaPOSIX_string.h" /* <= string header */
 #include "ciaak.h"            /* <= ciaa kernel header */
 #include "blinking.h"         /* <= own header */
+#include "tren.h"         /* <= own header */
+#include "myLedDriver.h"         /* <= own header */
+#include "myInputDriver.h"
 
 /*==================[macros and definitions]=================================*/
 
@@ -85,7 +88,10 @@
  *
  * Device path /dev/dio/out/0
  */
-static int32_t fd_out;
+static int32_t fd_out, fd_in;
+static uint32_t contador;
+static uint8 flag = 1;
+static uint8 direccion = 1;
 
 /*==================[external data definition]===============================*/
 
@@ -148,16 +154,17 @@ TASK(InitTask)
 
    /* print message (only on x86) */
    ciaaPOSIX_printf("Init Task...\n");
-
+   
    /* open CIAA digital outputs */
    fd_out = ciaaPOSIX_open("/dev/dio/out/0", ciaaPOSIX_O_RDWR);
-
+   fd_in = ciaaPOSIX_open("/dev/dio/in/0", ciaaPOSIX_O_RDONLY);
    /* activate periodic task:
     *  - for the first time after 350 ticks (350 ms)
     *  - and then every 250 ticks (250 ms)
     */
-   SetRelAlarm(ActivatePeriodicTask, 350, 250);
-
+   contador = 0;
+   SetRelAlarm(ActivatePeriodicTask, 350, 100);//blink
+   SetRelAlarm(ActivateEscuchaTecla, 1, 1);
    /* terminate task */
    TerminateTask();
 }
@@ -170,20 +177,73 @@ TASK(InitTask)
  */
 TASK(PeriodicTask)
 {
-   uint8_t outputs;
+   uint8  outputs;
+ciaaPOSIX_printf("Init Task...\n");
+   if ((flag == 1) )
+   {
+     /* code */
+    ciaaPOSIX_read(fd_out, &outputs,1);
+    // if (direccion == 1)
+    // {
+    //   outputs = ~(outputs);
+    // }
 
-   /* write blinking message */
-   ciaaPOSIX_printf("Blinking\n");
+    outputs ^= 1<<contador;
+    
+    ciaaPOSIX_write(fd_out,&outputs,1);
+    contador++;
+    if (contador>5)
+    {
+      /* code */
+      contador = 0;
+    }
+   }
 
-   /* blink output */
-   ciaaPOSIX_read(fd_out, &outputs, 1);
-   outputs ^= 0x20;
-   ciaaPOSIX_write(fd_out, &outputs, 1);
+   // cambio de direccion
+ 
 
-   /* terminate task */
    TerminateTask();
 }
 
+
+TASK(EscuchaTeclas)
+{
+  
+  uint8 inputs;
+
+  ciaaPOSIX_read(fd_in, &inputs,1);
+
+  if ((inputs&0x01) == 0)//apreto 1
+  {
+   flag = 1;
+    /* code */
+  }
+
+  if ((inputs&0x02) == 0)
+  {
+   flag = 0;
+    /* code */
+  }
+  if ((inputs&0x04) == 0)
+  {
+   direccion == 1;
+    /* code */
+  }
+  if ((inputs&0x08) == 0)
+  {
+   direccion == 0;
+    /* code */
+  }
+  
+
+
+//   ciaaPOSIX_read(fd_in, &inputs, 1);
+
+// ciaaPOSIX_write(fd_out, &inputs, 1);
+
+
+  TerminateTask();
+}
 /** @} doxygen end group definition */
 /** @} doxygen end group definition */
 /** @} doxygen end group definition */

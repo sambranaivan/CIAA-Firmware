@@ -93,15 +93,64 @@
  * \remarks This function never returns. Return value is only to avoid compiler
  *          warnings or errors.
  */
+float dhthum=0, dhttemp=0,temp_min=0.0,temp_max=40.0;
 int main(void)
 {
-   /* perform the needed initialization here */
+   /* inicializaciones */
+   
 
-   while(1) {
-      /* add your code here */
-   }
-   return 0;
+	init_UART_FTDI_EDUCIAA();
+   Chip_GPIO_Init(LPC_GPIO_PORT);
+
+
+
+	InitLed();
+	init_ADC_EDUCIAA();
+	ADC_Sel(CH1);
+	uint16_t i;
+    while(1){
+
+    	Delay(2000000);
+    	i = read_ADC_value_pooling();
+    		sendString_UART_USB_EDUCIAA(",",1);
+
+    	sendString_UART_USB_EDUCIAA(Itoa(read_ADC_value_pooling(),10),4);
+  
+    	ApagarLeds();
+			if(i > 256)
+			{
+			EncenderLed(LED1);
+
+			}
+			if(i > 512)
+			{
+			EncenderLed(LED2);
+			}
+			if(i > 768)
+			{
+			EncenderLed(LED3);
+			}
+			
+    }
+
+	
+		   
+			
+	
+		
 }
+
+
+void Delay(uint64_t sec)
+{
+	uint64_t i;
+	for(i=0 ; i <= sec ; i++ )
+	{}
+
+}
+
+
+
 
 /** @} doxygen end group definition */
 /** @} doxygen end group definition */
