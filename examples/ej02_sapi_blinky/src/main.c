@@ -70,10 +70,10 @@ int main(void){
    gpioConfig( 0, GPIO_ENABLE );
 
    /* Configuración de pines de entrada para Teclas de la CIAA-NXP */
-   gpioConfig( TEC1, GPIO_INPUT );
-   gpioConfig( TEC2, GPIO_INPUT );
-   gpioConfig( TEC3, GPIO_INPUT );
-   gpioConfig( TEC4, GPIO_INPUT );
+   //gpioConfig( TEC1, GPIO_INPUT );
+   //gpioConfig( TEC2, GPIO_INPUT );
+   //gpioConfig( TEC3, GPIO_INPUT );
+   //gpioConfig( TEC4, GPIO_INPUT );
 
    /* Configuración de pines de salida para Leds de la CIAA-NXP */
    gpioConfig( LEDR, GPIO_OUTPUT );
@@ -87,12 +87,12 @@ int main(void){
    while(1) {
 
       /* Prendo el led azul */
-      gpioWrite( LEDB, ON );
+      gpioWrite( LEDR, ON );
 
       delay(500);
 
       /* Apago el led azul */
-      gpioWrite( LEDB, OFF );
+      gpioWrite( LEDR, OFF );
 
       delay(500);
 

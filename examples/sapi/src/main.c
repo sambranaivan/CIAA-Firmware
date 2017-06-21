@@ -185,10 +185,10 @@ int main(void){
    gpioConfig( 0, GPIO_ENABLE );
 
    /* Configuración de pines de entrada para Teclas de la CIAA-NXP */
-   gpioConfig( TEC1, GPIO_INPUT );
-   gpioConfig( TEC2, GPIO_INPUT );
-   gpioConfig( TEC3, GPIO_INPUT );
-   gpioConfig( TEC4, GPIO_INPUT );
+  // gpioConfig( TEC1, GPIO_INPUT );
+  // gpioConfig( TEC2, GPIO_INPUT );
+  // gpioConfig( TEC3, GPIO_INPUT );
+  // gpioConfig( TEC4, GPIO_INPUT );
 
    /* Configuración de pines de salida para Leds de la CIAA-NXP */
    gpioConfig( LEDR, GPIO_OUTPUT );
@@ -198,22 +198,22 @@ int main(void){
    gpioConfig( LED2, GPIO_OUTPUT );
    gpioConfig( LED3, GPIO_OUTPUT );
 
-   gpioConfig( GPIO1 , GPIO_OUTPUT );
-   gpioConfig( GPIO8 , GPIO_INPUT );
+   // gpioConfig( GPIO1 , GPIO_OUTPUT );
+   // gpioConfig( GPIO8 , GPIO_INPUT );
 
    /* Inicializar UART_USB a 115200 baudios */
    uartConfig( UART_USB, 115200 );
 
- adcConfig( ADC_ENABLE ); /* ADC */
-   dacConfig( DAC_ENABLE ); /* DAC */
+  adcConfig( ADC_ENABLE ); /* ADC */
+    dacConfig( DAC_ENABLE ); /* DAC */
 
 
-   // uint8_t dato  = 0;
+    uint8_t dato  = 0;
    float dhthum=0, dhttemp=0;
    char res[20];
-   int32_t dato1 = rand() % 50;
-   int32_t dato2 = rand() % 50;
-   int32_t dato3 = rand() % 50;
+   //int32_t dato1 = rand() % 50;
+   //int32_t dato2 = rand() % 50;
+   //int32_t dato3 = rand() % 50;
 
    /* Buffer */
    static int32_t buff1[10];
@@ -221,7 +221,7 @@ int main(void){
    uint8_t muestra = 0;
 
     uint8_t led = OFF;
-   uint8_t miTexto[] = "";
+  // uint8_t miTexto[] = "";
     delay_t delay;
 
    /* Inicializar Retardo no bloqueante con tiempo en milisegundos
@@ -239,30 +239,39 @@ int main(void){
             led = ON;
          else
             led = OFF;
-         gpioWrite( LEDB, led );
-         gpioWrite( GPIO1, !led );
+         //gpioWrite( LEDR, led );
+         gpioWrite( LEDG, !led );
+         //gpioWrite( LEDB, led );
+         //         gpioWrite( LEDR, !led );
+         // gpioWrite( GPIO1, !led );
 
-         leer_dht22(&dhthum,&dhttemp);
-         muestra = adcRead( CH1 );
+          //leer_dht22(&dhthum,&dhttemp);
+          //muestra = adcRead( CH1 );
 
          // send random 3 values csv
-       // dato1 = rand() % 300;
+       //dato1 = rand() % 300;
        // dato2 = rand() % 300;
        // dato3 = rand() % 300;
        
-       // itoa( dato1, buff1, 10 ); /* base 10 significa decimal */
-       ftoa(dhttemp,res,2);
-       uartWriteString(UART_USB, res);
-       uartWriteByte( UART_USB, 44);
+       // // itoa( dato1, buff1, 10 ); /* base 10 significa decimal */
+       // ftoa(dhttemp,res,2);
+       // uartWriteString(UART_USB, res);
+       // uartWriteByte( UART_USB, 44);
 
-           ftoa(dhthum,res,2);
-       uartWriteString(UART_USB, res);
-       uartWriteByte( UART_USB, 44);
+           // ftoa(dhthum,res,2);
+       // uartWriteString(UART_USB, res);
+       // uartWriteByte( UART_USB, 44);
 
 
-       itoa( muestra, buff1, 10 ); /* base 10 significa decimal */
-       uartWriteString(UART_USB, buff1);
-       uartWriteString( UART_USB, "\r\n" ); /* Enviar un Enter */
+      // itoa( muestra, buff1, 10 ); /* base 10 significa decimal */
+      // uartWriteString(UART_USB, buff1);
+      // uartWriteString( UART_USB, "\r\n" ); /* Enviar un Enter */
+
+
+       // enviar random para prueba de pc
+         // itoa( dato1, buff1, 10 ); /* base 10 significa decimal */
+       // uartWriteString(UART_USB, buff1);
+       // uartWriteString( UART_USB, "\r\n" ); /* Enviar un Enter */
       }
        
 
